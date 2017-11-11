@@ -1,5 +1,7 @@
 ## fetchi
 
+**Note**: Many `Content-Type`s are not supported yet.
+
 ### Usage
 
 ```txt
@@ -16,7 +18,7 @@
     -h, --help                             output usage information
 ```
 
-## Examples
+### Examples
 
 ```bash
 $ fetchi http://httpbin.org/anything
