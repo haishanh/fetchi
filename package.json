@@ -1,0 +1,22 @@
+{
+  "name": "fetchi",
+  "version": "0.0.1",
+  "main": "n/a",
+  "repository": "haishanh/fetchi",
+  "homepage": "https://github.com/haishanh/fetchi",
+  "author": "Haishan <haishanhan@gmail.com>",
+  "license": "MIT",
+  "bin": {
+    "fetchi": "bin.js"
+  },
+  "dependencies": {
+    "chalk": "^2.3.0",
+    "commander": "^2.11.0",
+    "node-fetch": "^2.0.0-alpha.9"
+  },
+  "files": [
+    "package.json",
+    "bin.js",
+    "README.md"
+  ]
+}
