@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 'use strict';
 
-
 // TODO
 // - auto prefix http:// if needed
 // - rename to fetch-cli
@@ -64,15 +63,21 @@ prog
   .usage('[options] url')
   .option('-X, --method <method>', 'method of this HTTP request', parseMethod)
   .option('-d, --data <data>', 'request body payload', parseData)
-  .option('-c, --content-type <mime type name>', 'set Content-Type header', parseContentType)
+  .option(
+    '-c, --content-type <mime type name>',
+    'set Content-Type header',
+    parseContentType
+  )
   .option(
     '-H, --headers [header1, header2, ...]',
     'set other headers',
     collectHeaders
   )
+  .option('--jq <jq selector>', 'select JSON output with stedolan/jq')
   .parse(process.argv);
 
 const { method = 'GET', data: reqBodyData } = prog;
+
 const url = prog.args[0];
 if (!url) {
   console.log('\n  ' + chalk.red('Error: url is needed'));
@@ -81,7 +86,7 @@ if (!url) {
 }
 
 const typePats = {
-  json: /json$/,
+  json: /json$|json;/,
   text: /^text/
 };
 const patHeaderName = /(^[a-z])|-([a-z])/g;
@@ -105,8 +110,6 @@ function prettyPrintHeaderName(n) {
 }
 
 async function main() {
-  checkEnvHasJq();
-
   if (!headersObj['Content-Type']) {
     headersObj['Content-Type'] = state.likelyContentType;
   }
@@ -155,7 +158,8 @@ async function main() {
 
   if (typePats.json.test(resContentType)) {
     if (state.hasJq) {
-      const jq = spawn('jq', ['-C', '.']);
+      const selector = prog.jq ? prog.jq : '.';
+      const jq = spawn('jq', ['-C', selector]);
       jq.stdout.on('data', data => {
         // actuall print
         console.log(`${data}`);
@@ -185,4 +189,5 @@ async function main() {
   }
 }
 
+checkEnvHasJq();
 main();
