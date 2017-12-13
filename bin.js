@@ -2,7 +2,6 @@
 'use strict';
 
 // TODO
-// - auto prefix http:// if needed
 // - rename to fetch-cli
 
 // node index.js http://httpbin.org/ip
@@ -78,11 +77,15 @@ prog
 
 const { method = 'GET', data: reqBodyData } = prog;
 
-const url = prog.args[0];
+const urlPat = /https?:\/\//;
+
+let url = prog.args[0];
 if (!url) {
   console.log('\n  ' + chalk.red('Error: url is needed'));
   prog.help();
   process.exit(1);
+} else if (!urlPat.test(url)) {
+  url = 'http://' + url;
 }
 
 const typePats = {
