@@ -1,5 +1,6 @@
 {
   "name": "fetchi",
+  "description": "Yet another cURL like HTTP request CLI tool",
   "version": "0.0.4",
   "main": "n/a",
   "repository": "haishanh/fetchi",
