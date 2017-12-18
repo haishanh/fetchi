@@ -51,7 +51,7 @@ function parseMethod(v) {
 function parseData(d) {
   // TODO d is "@a/b/c.json"
   if (/^[\s]*?(\{|\[[\s]*?{)/.test(d)) {
-    // this shouldb a json
+    // this should be a json
     state.likelyContentType = 'application/json';
   }
   return d;
@@ -100,8 +100,11 @@ function jsonStr(j) {
 
 async function checkEnvHasJq() {
   const tmp = spawn('which', ['jq']);
-  tmp.on('close', code => {
-    return (state.hasJq = code === 0);
+  return new Promise(resolve => {
+    tmp.on('close', code => {
+      state.hasJq = code === 0;
+      resolve();
+    });
   });
 }
 
@@ -113,6 +116,8 @@ function prettyPrintHeaderName(n) {
 }
 
 async function main() {
+  await checkEnvHasJq();
+
   if (!headersObj['Content-Type']) {
     headersObj['Content-Type'] = state.likelyContentType;
   }
@@ -192,5 +197,4 @@ async function main() {
   }
 }
 
-checkEnvHasJq();
 main();
